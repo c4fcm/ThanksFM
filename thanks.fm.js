@@ -8,10 +8,10 @@ if (Meteor.isClient) {
     tasks: function () {
       if (Session.get("hideCompleted")) {
         // If hide completed is checked, filter tasks
-        return Tasks.find({checked: {$ne: true}}, {sort: {createdAt: -1}});
+        return Tasks.find({checked: {$ne: true}, active: {$ne: false}},  {sort: {createdAt: -1}});
       } else {
         // Otherwise, return all of the tasks
-        return Tasks.find({}, {sort: {createdAt: -1}});
+        return Tasks.find({active: {$ne: false}}, {sort: {createdAt: -1}});
       }
     },
     hideCompleted: function () {
@@ -25,12 +25,14 @@ if (Meteor.isClient) {
   Template.body.events({
     "submit .new-task": function (event) {
       // This function is called when the new task form is submitted
-      var text = event.target.text.value;
+      var titleText = event.target.title.value;
+      var descriptionText = event.target.description.value;
 
-      Meteor.call("addTask", text);
+      Meteor.call("addTask", titleText, descriptionText);
 
       // Clear form
-      event.target.text.value = "";
+      event.target.title.value = "";
+      event.target.description.value = "";
 
       // Prevent default form submit
       return false;
@@ -65,17 +67,21 @@ if (Meteor.isClient) {
 }
 
 Meteor.methods({
-  addTask: function (text) {
+  addTask: function (titleText, descriptionText) {
     // Make sure the user is logged in before inserting a task
     if (! Meteor.userId()) {
       throw new Meteor.Error("not-authorized");
     }
+    currentDate = new Date();
 
     Tasks.insert({
-      text: text,
-      createdAt: new Date(),
+      title: titleText,
+      description: descriptionText,
+      createdAt: currentDate,
+      updatedAt: currentDate,
       owner: Meteor.userId(),
-      username: Meteor.user().username
+      username: Meteor.user().username,
+      active: true
     });
   },
   deleteTask: function (taskId) {
@@ -84,8 +90,8 @@ Meteor.methods({
       // If the task is private, make sure only the owner can delete it
       throw new Meteor.Error("not-authorized");
     }
-
-    Tasks.remove(taskId);
+    Tasks.update(taskId, { $set: { active: false } });
+  //Tasks.remove(taskId);
   },
   setChecked: function (taskId, setChecked) {
     var task = Tasks.findOne(taskId);
