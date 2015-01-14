@@ -1,52 +1,49 @@
 <head>
-  <title>list</title>
+  <title>Thanks.fm</title>
 </head>
 
 <body>
   <div class="container">
     <header>
-      <h1>list ({{incompleteCount}})</h1>
-
-      <label class="hide-completed">
-        <input type="checkbox" checked="{{hideCompleted}}" />
-        hide checked entries
-      </label>
-
+      <h1>Welcome to Thanks.fm! ({{projectCount}} active projects)</h1>
       {{> loginButtons}}
 
       {{#if currentUser}}
-        <form class="new-task">
-          <input type="text" name="title" placeholder="title" />
-          <input type="text" name="description" placeholder="description" />
-          <input type="submit" name="submit"/>
-        </form>
+        {{> newProjectForm}}
       {{/if}}
     </header>
-
-    <ul>
-      {{#each tasks}}
-        {{> task}}
-      {{/each}}
-    </ul>
+    {{> projects}}
   </div>
 </body>
 
-<template name="task">
-  <li class="{{#if checked}}checked{{/if}} {{#if private}}private{{/if}}">
-    <button class="delete">&times;</button>
+<template name="newProjectForm">
+  <form id="new-project">
+    <input type="text" name="title" placeholder="Title" />
+    <!--<input type="text" name="author" placeholder="Author" /> -->
+    <input type="text" name="description" placeholder="Description" />
+    <input type="submit" name="submit"/>
+  </form>
+</template>
 
-    <input type="checkbox" checked="{{checked}}" class="toggle-checked" />
+<template name="projects">
+  <ul>
+    {{#each projectList}}
+    <li class="{{#if private}}private{{else}}public{{/if}}">
+      {{#if isOwner}}
+        <button class="toggle-private">
+          {{#if private}}
+            Private    
+          {{else}}
+            Public
+          {{/if}}
+        </button>
+      {{/if}}
+      <strong>{{title}}</strong> - {{username}}
+      <button class="delete">&times;</button>
+      <p>{{createdAt}}</p>
+      <p>{{description}}</p>
 
-    {{#if isOwner}}
-      <button class="toggle-private">
-        {{#if private}}
-          Private    
-        {{else}}
-          Public
-        {{/if}}
-      </button>
-    {{/if}}
-
-    <span class="text"><strong>{{username}}</strong> - {{title}} - {{description}} </span>
-  </li>
+    </li>
+    {{/each}}
+  </ul>
 </template>
