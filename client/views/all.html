@@ -1,0 +1,67 @@
+<template name="newProjectForm">
+	<form id="new-project">
+		<input type="text" name="title" placeholder="Title" />
+		
+		<input type="text" name="description" placeholder="Description" />
+		<input type="submit" name="submit"/>
+	</form>
+</template>
+
+<!-- <template name="projects">
+	<ul>
+		{{#each projectList}}
+		<li class="{{#if private}}private{{else}}public{{/if}}">
+			{{> projectInfo }}
+		</li>
+		{{/each}}
+	</ul>
+</template> -->
+
+<template name="test">
+	<p>test</p>
+	{{testvar}}
+</template>
+
+<template name="loading">
+	loading...dfsa
+</template>
+
+<!-- <template name="projectInfo">
+	{{#if isOwner}}
+		<button class="toggle-private">
+			{{#if private}}
+				Private
+			{{else}}
+				Public
+			{{/if}}
+		</button>
+		<button class="delete">Delete</button>
+	{{/if}}
+	<strong>
+		<a href={{pathFor 'projectInfo' projectId=this._id}}>{{title}}</a>
+	</strong>
+	 - <a href={{pathFor 'userInfo' username=this.username}}>{{username}}</a>
+	<ul>
+		{{#each contributorList}}
+			<li>
+				{{this}}
+			</li>
+		{{/each}}
+	</ul>
+	{{#if isOwner}}
+		<form class="addContributorForm">
+			<input type="text" name="contributor" placeholder="Contributor" />
+			<input type="submit" name="add-contributor" value="Add Contributor"/>
+		</form>
+	{{/if}}
+	
+	<p>{{createdAt}}</p>
+	<p>{{description}}</p>
+</template> -->
+
+<template name="userInfo">
+	{{#each projectsByUser}}
+		{{> projectInfo}}
+	{{/each}}
+</template>
+

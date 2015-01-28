@@ -1,0 +1,13 @@
+<template name="projectPage">
+	{{#if isOwner}}
+		<button type="button" class="btn btn-default btn-sm toggle-private">
+			{{#if private}}
+				Private
+			{{else}}
+				Public
+			{{/if}}
+		</button>
+		<button class="btn btn-default btn-sm delete">Delete</button>
+	{{/if}}
+	{{> project}}
+</template>

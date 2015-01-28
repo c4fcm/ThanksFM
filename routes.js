@@ -16,7 +16,7 @@ Router.map(function(){
       return testvar;
     }
   });
-  this.route('projectInfo', {
+  this.route('projectPage', {
     path: '/projects/:projectId',
     data: function() {
       var projectId = this.params.projectId;
